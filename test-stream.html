@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stream Test</title>
+</head>
+<body>
+    <h1>Testing Agent Stream</h1>
+    <p>Open the browser console (F12) to see the stream output.</p>
+    <p><b>Important:</b> This file must be served by a web server, not opened directly. See the instructions in your chat.</p>
+    <script>
+        async function callStreamEndpoint() {
+            console.log("--- Preparing to call stream endpoint ---");
+            try {
+                const response = await fetch('http://localhost:3000/agent/stream', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: 'hi from test-stream.html' }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                console.log('--- Stream Connection Established ---');
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) {
+                        break;
+                    }
+                    const chunk = decoder.decode(value, { stream: true });
+                    console.log(chunk);
+                }
+
+                console.log('--- Stream Finished ---');
+
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+
+        callStreamEndpoint();
+    </script>
+</body>
+</html>
