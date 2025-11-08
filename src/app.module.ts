@@ -11,13 +11,13 @@ import { AgentModule } from './modules/agent/agent.module';
       isGlobal: true,
       envFilePath: '.env', 
     }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI') || 'mongodb://localhost:27017/automatik3',
-      }),
-      inject: [ConfigService],
-    }),
+    // MongooseModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   useFactory: async (configService: ConfigService) => ({
+    //     uri: configService.get<string>('MONGODB_URI') || 'mongodb://localhost:27017/automatik3',
+    //   }),
+    //   inject: [ConfigService],
+    // }),
     AgentModule,
   ],
   controllers: [AppController],
